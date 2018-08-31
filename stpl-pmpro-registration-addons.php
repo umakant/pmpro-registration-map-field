@@ -8,6 +8,17 @@ Author: STPL
 Author URI: https://www.stpl.biz/
 */
 
+function stpl_pmpro_enqueue_script() {
+    wp_enqueue_script( 'stpl_pmpro_script', plugin_dir_url( __FILE__ ) . 'js/stpl_pmpro_register.js' );
+}
+
+function stpl_pmpro_enqueue_style() {
+    wp_enqueue_style( 'stpl_pmpro_style', plugin_dir_url( __FILE__ ) . 'css/stpl_pmpro_style.css' );
+}
+
+add_action('wp_enqueue_scripts', 'stpl_pmpro_enqueue_script');
+add_action('wp_enqueue_scripts', 'stpl_pmpro_enqueue_style');
+
 function stpl_function_addon( ) {
     //don't break if Register Helper is not loaded
     if( ! function_exists ( 'pmprorh_add_registration_field' ) ) {
@@ -37,90 +48,100 @@ function stpl_function_addon( ) {
     ));
 
     $fields[] = new PMProRH_Field (
-        'list_of_services',
-        'textarea',
+        'what_your_location_div',
+        'html',
         array(
             'label' => 'List of Services Offered',
-            'profile' => true,
-            'required' => true,
+            'html' => '<table id="addService">
+            <tr>
+                <td>Services </td>
+                <td><input type="text" name="services[]" value=""></td>
+            </tr>
+        </table>
+        <br />
+        <button type="button" id="list_services">Add new Service</button>',
     ));
+
 
     $fields[] = new PMProRH_Field (
         'hours_operation',
         'html',
         array(
             'label' => 'Hours of Operation',
-            'html' => '<table id="addHours" border="1">
+            'html' => '<table id="addHours">
                 <tr>
                     <td>Sunday</td>
                     <td>
-                        <input type="text" name="hours_operation_start[]" value="" placeholder="Enter Start Hours">
-                        <input type="text" name="hours_operation_end[]" value="" placeholder="Enter End Hours">
+                        <input type="checkbox" value="1" id="sunday_checked">
+                        <div class="sunday_hide hours_field">
+                            <input type="text" name="hours_operation_start[]" class="sunday_input" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="sunday_input" value="" placeholder="End Hours">
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Monday</td>
                     <td>
-                        <input type="text" name="hours_operation_start[]" value="" placeholder="Enter Start Hours">
-                        <input type="text" name="hours_operation_end[]" value="" placeholder="Enter End Hours">
+                        <input type="checkbox" value="1" id="monday_checked">
+                        <div class="monday_hide">
+                            <input type="text" name="hours_operation_start[]" class="monday_input" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="monday_input" value="" placeholder="End Hours">
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Tuesday</td>
                     <td>
-                        <input type="text" name="hours_operation_start[]" value="" placeholder="Enter Start Hours">
-                        <input type="text" name="hours_operation_end[]" value="" placeholder="Enter End Hours">
+                        <input type="checkbox" value="1" id="tuesday_checked">
+                        <div class="tuesday_hide">
+                            <input type="text" name="hours_operation_start[]" class="tuesday_input" value="" placeholder="Enter Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="tuesday_input" value="" placeholder="Enter End Hours">
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Wednesday</td>
                     <td>
-                        <input type="text" name="hours_operation_start[]" value="" placeholder="Enter Start Hours">
-                        <input type="text" name="hours_operation_end[]" value="" placeholder="Enter End Hours">
+                        <input type="checkbox" value="1" id="wednesday_checked">
+                        <div class="wednesday_hide">
+                            <input type="text" name="hours_operation_start[]" class="wednesday_input" value="" placeholder="Enter Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="wednesday_input" value="" placeholder="Enter End Hours">
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Thursday</td>
                     <td>
-                        <input type="text" name="hours_operation_start[]" value="" placeholder="Enter Start Hours">
-                        <input type="text" name="hours_operation_end[]" value="" placeholder="Enter End Hours">
+                        <input type="checkbox" value="1" id="thursday_checked">
+                        <div class="thursday_hide">
+                            <input type="text" name="hours_operation_start[]" class="thursday_input" value="" placeholder="Enter Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="thursday_input" value="" placeholder="Enter End Hours">
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Friday</td>
                     <td>
-                        <input type="text" name="hours_operation_start[]" value="" placeholder="Enter Start Hours">
-                        <input type="text" name="hours_operation_end[]" value="" placeholder="Enter End Hours">
+                        <input type="checkbox" value="1" id="friday_checked">
+                        <div class="friday_hide">
+                            <input type="text" name="hours_operation_start[]" class="friday_input" value="" placeholder="Enter Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="friday_input" value="" placeholder="Enter End Hours">
+                        </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Saturday</td>
                     <td>
-                        <input type="text" name="hours_operation_start[]" value="" placeholder="Enter Start Hours">
-                        <input type="text" name="hours_operation_end[]" value="" placeholder="Enter End Hours">
+                        <input type="checkbox" value="1" id="saturday_checked">
+                        <div class="saturday_hide">
+                            <input type="text" name="hours_operation_start[]" class="saturday_input" value="" placeholder="Enter Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="saturday_input" value="" placeholder="Enter End Hours">
+                        </div>
                     </td>
                 </tr>
                 <tr>
                 </tr>
             </table>',
-    ));
-
-    $fields[] = new PMProRH_Field (
-        'what_your_location_div',
-        'html',
-        array(
-            'label' => 'List of Services Offered',
-            'html' => '<table id="addService" border="1">
-            <tr>
-                <td>Services</td>
-                <td><input type="text" name="services[]" value=""></td>
-                <td><input type="text" name="services[]" value=""></td>
-                <td><input type="text" name="services[]" value=""></td>
-                <td><input type="text" name="services[]" value=""></td>
-            </tr>
-        </table>
-        <br />
-        <button type="button" onclick="displayResult()">Add new Service</button>',
     ));
 
     //add the fields into a new checkout_boxes are of the checkout page
