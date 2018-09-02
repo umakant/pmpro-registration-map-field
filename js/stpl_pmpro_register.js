@@ -11,11 +11,9 @@ jQuery(document).ready(function(){
     });
     jQuery("#sunday_checked").click(function () {
         if (jQuery(this).is(":checked")) {
-            jQuery(this).close().show();
-            //jQuery(".sunday_hide").show();
+            jQuery(".sunday_hide").show();
         } else {
-            jQuery(this).close().hide();
-            //jQuery(".sunday_hide").hide();
+            jQuery(".sunday_hide").hide();
         }
     });
     jQuery("#monday_checked").click(function () {
@@ -37,6 +35,13 @@ jQuery(document).ready(function(){
             jQuery(".wednesday_hide").show();
         } else {
             jQuery(".wednesday_hide").hide();
+        }
+    });
+    jQuery("#thursday_checked").click(function () {
+        if (jQuery(this).is(":checked")) {
+            jQuery(".thursday_hide").show();
+        } else {
+            jQuery(".thursday_hide").hide();
         }
     });
     jQuery("#friday_checked").click(function () {
