@@ -1,3 +1,51 @@
 .sunday_hide, .monday_hide, .tuesday_hide, .wednesday_hide, .thursday_hide, .friday_hide, .saturday_hide {
     display: none;
 }
+table#addService tr {
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+}
+table#addService tr td input {
+    margin-left: 10px;
+    padding: 5px;
+    margin-top: 10px;
+}
+span.remCF, span.remSH {
+    margin-left: 10px;
+    color: #36baf7;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+span#list_services, span#special_hours {
+    color: #36baf7;
+    font-weight: 700;
+    cursor: pointer;
+}
+div#what_your_location_div_div {
+    margin-bottom: 10px;
+}
+.hours_field {
+    width: 100%;
+}
+.hours_field input {
+    float: left;
+    display: inline-block;
+    width: 98px;
+    margin-right: 4px !important;
+    border: 1px solid #36baf7 !important;
+}
+div#hours_operation_div {
+    margin-bottom: 10px;
+}
+div#company_logo_div {
+    margin: 20px 0px;
+}
+div#uploads_files_div {
+    margin: 20px 0px;
+}
+table#special_hours_table input {
+    margin-right: 4px !important;
+    border: 1px solid #36baf7 !important;
+    width: 141px;
+}

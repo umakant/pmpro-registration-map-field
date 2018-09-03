@@ -20,6 +20,25 @@ add_action('wp_enqueue_scripts', 'stpl_pmpro_enqueue_script');
 add_action('wp_enqueue_scripts', 'stpl_pmpro_enqueue_style');
 
 
+function stpl_pmpro_enqueue_time_picker_script() {
+    wp_enqueue_script( 'stpl_pmpro_time_picker_script', plugin_dir_url( __FILE__ ) . 'js/jquery.timepicker.js' );
+}
+
+function stpl_pmpro_enqueue_time_picker_style() {
+    wp_enqueue_style( 'stpl_pmpro_time_picker_style', plugin_dir_url( __FILE__ ) . 'css/jquery.timepicker.css' );
+}
+
+add_action('wp_enqueue_scripts', 'stpl_pmpro_enqueue_time_picker_script');
+add_action('wp_enqueue_scripts', 'stpl_pmpro_enqueue_time_picker_style');
+
+function wpse_enqueue_datepicker() {
+    wp_enqueue_script( 'jquery-ui-datepicker' );
+
+    wp_register_style( 'jquery-ui', 'http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css' );
+    wp_enqueue_style( 'jquery-ui' );  
+}
+add_action( 'wp_enqueue_scripts', 'wpse_enqueue_datepicker' );
+
 function stpl_function_addon( ) {
     //don't break if Register Helper is not loaded
     if( ! function_exists ( 'pmprorh_add_registration_field' ) ) {
@@ -28,6 +47,30 @@ function stpl_function_addon( ) {
 
     //define the fields
     $fields = array();
+
+    $fields[] = new PMProRH_Field (
+        'business_name',
+        'text',
+        array(
+            'label' => 'Business Name',
+            'profile' => true,
+            'required' => true,
+    ));
+
+    $fields[] = new PMProRH_Field (
+        'business_category',
+        'select',
+        array(
+            'label' => 'Business Category',
+            'profile' => true,
+            'required' => true,
+            'options' => array(
+                'web_development' => 'Web Development',
+                'angular_development' => 'Angular Development',
+                'app_development' => 'App Development'
+            )
+    ));
+
 
     $fields[] = new PMProRH_Field (
         'brief_description',
@@ -55,13 +98,18 @@ function stpl_function_addon( ) {
             'label' => 'List of Services Offered',
             'html' => '<table id="addService">
             <tr>
-                <td>Services </td>
+                <td>Service Primary category</td>
+                <td><input type="text" name="services_primary" value=""></td>
+            <tr>
+            <tr>
+                <td>Secondary Services </td>
                 <td><input type="text" name="services[]" value=""></td>
             </tr>
         </table>
         <br />
-        <button type="button" id="list_services">Add new Service</button>',
+        <span class="add_new_service" id="list_services">Add New Service(+)</span>',
     ));
+    
 
 
     $fields[] = new PMProRH_Field (
@@ -73,70 +121,84 @@ function stpl_function_addon( ) {
                 <tr>
                     <td>Sunday</td>
                     <td>
-                        <input type="checkbox" value="1" id="sunday_checked">
+                        <div class="check_days">
+                            <input type="checkbox" value="1" id="sunday_checked">
+                        </div>
                         <div class="sunday_hide hours_field">
-                            <input type="text" name="hours_operation_start[]" class="sunday_input" value="" placeholder="Start Hours">
-                            <input type="text" name="hours_operation_end[]" class="sunday_input" value="" placeholder="End Hours">
+                            <input type="text" name="hours_operation_start[]" class="sunday_input" id="sun_start_hrs" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" id="sun_end_hrs" class="sunday_input" value="" placeholder="End Hours">
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Monday</td>
                     <td>
-                        <input type="checkbox" value="1" id="monday_checked">
-                        <div class="monday_hide">
-                            <input type="text" name="hours_operation_start[]" class="monday_input" value="" placeholder="Start Hours">
-                            <input type="text" name="hours_operation_end[]" class="monday_input" value="" placeholder="End Hours">
+                        <div class="check_days">
+                            <input type="checkbox" value="1" id="monday_checked">
+                        </div>
+                        <div class="monday_hide hours_field">
+                            <input type="text" name="hours_operation_start[]" class="monday_input" id="mon_start_hrs" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="monday_input" id="mon_end_hrs" value="" placeholder="End Hours">
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Tuesday</td>
                     <td>
-                        <input type="checkbox" value="1" id="tuesday_checked">
-                        <div class="tuesday_hide">
-                            <input type="text" name="hours_operation_start[]" class="tuesday_input" value="" placeholder="Enter Start Hours">
-                            <input type="text" name="hours_operation_end[]" class="tuesday_input" value="" placeholder="Enter End Hours">
+                        <div class="check_days">
+                            <input type="checkbox" value="1" id="tuesday_checked">
+                        </div>
+                        <div class="tuesday_hide hours_field">
+                            <input type="text" name="hours_operation_start[]" class="tuesday_input" id="tues_start_hrs" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="tuesday_input" id="tues_end_hrs" value="" placeholder="End Hours">
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Wednesday</td>
                     <td>
-                        <input type="checkbox" value="1" id="wednesday_checked">
-                        <div class="wednesday_hide">
-                            <input type="text" name="hours_operation_start[]" class="wednesday_input" value="" placeholder="Enter Start Hours">
-                            <input type="text" name="hours_operation_end[]" class="wednesday_input" value="" placeholder="Enter End Hours">
+                        <div class="check_days">
+                            <input type="checkbox" value="1" id="wednesday_checked">
+                        </div>
+                        <div class="wednesday_hide hours_field">
+                            <input type="text" name="hours_operation_start[]" class="wednesday_input" id="wed_start_hrs" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="wednesday_input" id="wed_end_hrs" value="" placeholder="End Hours">
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Thursday</td>
                     <td>
-                        <input type="checkbox" value="1" id="thursday_checked">
-                        <div class="thursday_hide">
-                            <input type="text" name="hours_operation_start[]" class="thursday_input" value="" placeholder="Enter Start Hours">
-                            <input type="text" name="hours_operation_end[]" class="thursday_input" value="" placeholder="Enter End Hours">
+                        <div class="check_days">
+                            <input type="checkbox" value="1" id="thursday_checked">
+                        </div>
+                        <div class="thursday_hide hours_field">
+                            <input type="text" name="hours_operation_start[]" class="thursday_input" id="thur_start_hrs" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="thursday_input" id="thur_end_hrs" value="" placeholder="End Hours">
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Friday</td>
                     <td>
-                        <input type="checkbox" value="1" id="friday_checked">
-                        <div class="friday_hide">
-                            <input type="text" name="hours_operation_start[]" class="friday_input" value="" placeholder="Enter Start Hours">
-                            <input type="text" name="hours_operation_end[]" class="friday_input" value="" placeholder="Enter End Hours">
+                        <div class="check_days">
+                            <input type="checkbox" value="1" id="friday_checked">
+                        </div>
+                        <div class="friday_hide hours_field">
+                            <input type="text" name="hours_operation_start[]" class="friday_input" id="fri_start_hrs" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="friday_input" id="fri_end_hrs" value="" placeholder="End Hours">
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Saturday</td>
                     <td>
-                        <input type="checkbox" value="1" id="saturday_checked">
-                        <div class="saturday_hide">
-                            <input type="text" name="hours_operation_start[]" class="saturday_input" value="" placeholder="Enter Start Hours">
-                            <input type="text" name="hours_operation_end[]" class="saturday_input" value="" placeholder="Enter End Hours">
+                        <div class="check_days">
+                            <input type="checkbox" value="1" id="saturday_checked">
+                        </div>
+                        <div class="saturday_hide hours_field">
+                            <input type="text" name="hours_operation_start[]" class="saturday_input" id="sat_start_hrs" value="" placeholder="Start Hours">
+                            <input type="text" name="hours_operation_end[]" class="saturday_input"  id="sat_end_hrs" value="" placeholder="End Hours">
                         </div>
                     </td>
                 </tr>
@@ -145,22 +207,55 @@ function stpl_function_addon( ) {
             </table>',
     ));
 
+    $fields[] = new PMProRH_Field (
+        'special_hours_div',
+        'html',
+        array(
+            'label' => 'Special Hours',
+            'html' => '<table id="special_hours_table">
+            <tr>
+                <td>Special Hours </td>
+                <td><input type="text" name="special_hours[]" id="special_hours_picker" value="" placeholder="Select Date"></td>
+                <td><input type="text" name="special_start_hours[]" id="special_start_hours" value="" placeholder="Start Hours"></td>
+                <td><input type="text" name="special_end_hours[]" id="special_end_hours" value="" placeholder="End Hours"></td>
+            </tr>
+        </table>
+        <br />
+        <span class="add_new_spec_hours" id="special_hours">Add New Special Hours(+)</span>',
+    ));
+
+    $fields[] = new PMProRH_Field (
+        'company_logo',
+        'file',
+        array(
+            'label' => 'Company Logo',
+            'accept' => 'jpeg, jpg, png, gif',
+    ));
 
     $fields[] = new PMProRH_Field (
         'uploads_files',
         'html',
         array(
-            'label' => 'Upload Pictures',
+            'label' => 'Upload Other Pictures',
             'html' => '<input type="file" name="upload_attachment[]" class="files" size="50" multiple="multiple" />',
     ));
 
+
     $fields[] = new PMProRH_Field (
-        'uploads_pictures',
+        'areas_serviced',
+        'text',
+        array(
+            'label' => 'Areas Serviced',
+            'profile' => true,
+            'required' => true,
+    ));
+
+    $fields[] = new PMProRH_Field (
+        'year_established',
         'html',
         array(
-            'label' => 'Upload Pictures',
-            'html' => '<div id="media-uploader" class="dropzone"></div>
-            <input type="hidden" name="media-ids" value="">',
+            'label' => 'Year Established',
+            'html' => '<input type="text" name="year_established[]" id="year_established" class="year_established" placeholder="Select Date"/>',
     ));
 
     //add the fields into a new checkout_boxes are of the checkout page
@@ -177,11 +272,35 @@ add_action( 'init', 'stpl_function_addon' );
 function insert_values_pmpro() {
     $user_id = get_current_user_id();
     $services = serialize($_POST['services']);
+    $services_primary = serialize($_POST['services_primary']);
     $hours_operation_start = serialize($_POST['hours_operation_start']);
     $hours_operation_end = serialize($_POST['hours_operation_end']);
-    update_user_meta($user_id,'services', $services);
-    update_user_meta($user_id,'hours_operation_start', $hours_operation_start);
-    update_user_meta($user_id,'hours_operation_end', $hours_operation_end);
+    $special_hours = serialize($_POST['special_hours']);
+    $special_start_hours = serialize($_POST['special_start_hours']);
+    $special_end_hours = serialize($_POST['special_end_hours']);
+
+    if($hours_operation_start){
+        update_user_meta($user_id,'hours_operation_start', $hours_operation_start);
+    }
+    if($hours_operation_end){
+        update_user_meta($user_id,'hours_operation_end', $hours_operation_end);
+    }
+    if($services_primary){
+        update_user_meta($user_id,'services_primary', $services_primary);
+    }
+    if($services){
+        update_user_meta($user_id,'services', $services);
+    }
+    if($special_hours){
+        update_user_meta($user_id,'special_hours', $special_hours);
+    }
+    if($special_start_hours){
+        update_user_meta($user_id,'special_start_hours', $special_start_hours);
+    }
+    if($special_end_hours){
+        update_user_meta($user_id,'special_end_hours', $special_end_hours);
+    }
+
 
     if ($_FILES) {
 
@@ -249,8 +368,9 @@ function insert_values_pmpro() {
             $count++;
 
             // add images to the gallery field
-            update_field('field_535e6a644107b', $galleryImages, $post_id);
-
+            if($galleryImages){
+                update_user_meta($user_id,'upload_images', $galleryImages);
+            }
         }
 
 
@@ -351,7 +471,7 @@ function add_script() {
 ";
 }
 
-add_action('wp_footer','add_script');
+//add_action('wp_footer','add_script');
 
 
 function handle_dropped_media() {
